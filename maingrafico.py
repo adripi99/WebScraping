@@ -5,7 +5,8 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
-# Variables globales
+# Variables 
+#Test commit
 jsondata={}
 categoriaAmazon_config = {}
 categoriaAli_config = {}
