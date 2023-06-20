@@ -5,8 +5,8 @@ from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
-# Variables 
-#Test commit
+# Variables globales
+#NOTA: DEF funciones codigo. triplecomillas descripcion y argumentos.extension vsc
 jsondata={}
 categoriaAmazon_config = {}
 categoriaAli_config = {}
@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.categoria_combo)
         layout.addWidget(self.num_productos_label)
         layout.addWidget(self.num_productos_edit)
-        layout.addWidget(QLabel("Atributos Disponibles a extraer:"))
+        layout.addWidget(QLabel("Atributos Disponibles a extraer:")) # NOTA: Horizontal layout con adwidget con un sublayout 
         layout.addWidget(self.available_products_list)
         layout.addWidget(self.move_to_selected_button)
         layout.addWidget(self.move_to_available_button)
@@ -178,18 +178,15 @@ class MainWindow(QMainWindow):
         self.log_text.append(message)
         
 def load_config(file_path):
-    global jsondata
     with open(file_path, "r", encoding="utf-8") as f:
         config = json.load(f)
-        jsondata=config
-
     return config
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
 
-    web_config = load_config("Vista_config.json") #encoding utf
+    jsondata= load_config("Vista_config.json") #encoding utf
 
     window.show()
     sys.exit(app.exec())
