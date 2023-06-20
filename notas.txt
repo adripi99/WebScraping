@@ -1,5 +1,3 @@
-
-anadir utf8 al open
 triadvisor
 +-aliexpress
 +-scrapear dentro de cada producto
@@ -10,4 +8,4 @@ overleaf editor online de latex word online, edito el .text
 table generator 
 Extra:
 barra de progreso
-anadir atr4ibutyos especificos de cada categoria
+anadir atributos especificos de cada categoria
