@@ -1,0 +1,13 @@
+
+anadir utf8 al open
+triadvisor
++-aliexpress
++-scrapear dentro de cada producto
+
+Notas:
+QT designer, interfaz grafica para los elementos
+overleaf editor online de latex word online, edito el .text 
+table generator 
+Extra:
+barra de progreso
+anadir atr4ibutyos especificos de cada categoria
