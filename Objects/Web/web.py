@@ -3,14 +3,14 @@ from selenium.webdriver.chrome.options import Options
 
 class Web:
     def __init__(self,show_browser):
-        self.driver_path = "C:/Users/adrip/Desktop/VSC/Seleniumtfg2023/Objects/chromedriver.exe"
+        self.driver_path = "Objects\Web\chromedriver.exe"
         self.driver = None
         self.driver_options= None
         self.show_browser = show_browser
     def configurar_navegador(self):
-        if self.show_browser:
-            self.chrome_options.add_argument('--headless')  # Ocultar el navegador
         self.chrome_options = Options()
+        if not self.show_browser:
+            self.chrome_options.add_argument('--headless')  # Ocultar el navegador
         self.chrome_options.add_argument('--log-level=3')
         self.chrome_options.add_argument('--ignore-certificate-errors')
         self.chrome_options.add_argument('--ignore-ssl-errors')

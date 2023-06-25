@@ -9,7 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 class AmazonWeb(Web):
     def __init__(self, show_browser):
-        super().__init__()
+        super().__init__(show_browser)
 
     def configurar_navegador(self):
         super().configurar_navegador()
@@ -27,8 +27,9 @@ class AmazonWeb(Web):
         except Exception as e:
             atributos_extraidos[e] = "Error: " + str(e)
         #NOTA: sacar todo lo posible , profundidad si o no (binario) seleccionar al extraer
-        if(atributosP):
-            url = elemento.find_element(By.XPATH, './/a').get_attribute('href')#Entramos en el producto
+        if not (atributosP):
+            url_elemento = elemento.find_element(By.XPATH, './/a[@class="a.a-link-normal"]')  # Entramos en el producto
+            url = url_elemento.get_attribute('href')
             self.driver.get(url)
             try:
                     titulo = elemento.find_element(By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]').text
@@ -40,15 +41,16 @@ class AmazonWeb(Web):
             except Exception as e:
                 atributos_extraidos[e] = "Error: " + str(e)  
         return atributos_extraidos
+        
     
-    def buscar_productos(self, categoria, num_productos,atributos_en_profundidad, log_callback=None):
+    def buscar_productos(self, categoria, num_productos,atributos_en_profundidad,atributos_a_extraer, log_callback=None):
         self.configurar_navegador()
         url = self.obtener_url_amazon(categoria)
         self.driver.get(url)
-        productos = ColeccionProductos()
+        productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
         # Aceptar las cookies
-        accept_button = self.find_element(By.ID, 'sp-cc-accept')
+        accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
         accept_button.click()
         while Numero_Productos != num_productos:
             wait = WebDriverWait(self.driver, 10)
@@ -56,6 +58,7 @@ class AmazonWeb(Web):
 
             for elemento in elementos:
                 atributos_extraidos = self.extraer_atributos_producto(elemento,atributos_en_profundidad)
+                print(atributos_extraidos)
                 producto = AmazonProducto(**atributos_extraidos)
                 productos.agregar_producto(producto)
                 if log_callback is not None:
