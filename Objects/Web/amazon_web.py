@@ -13,34 +13,51 @@ class AmazonWeb(Web):
 
     def configurar_navegador(self):
         super().configurar_navegador()
-    def extraer_atributos_producto(self, elemento,atributosP):
+    def extraer_atributos_producto(self, elemento, atributosP):
         atributos_extraidos = {}
         try:
             titulo = elemento.find_element(By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]').text
             atributos_extraidos["titulo"] = titulo
+        except Exception as e:
+            atributos_extraidos["titulo"] = "No encontrado: " + str(e)
 
+        try:
             precio = elemento.find_element_by_css_selector('span.a-price-whole').text
             atributos_extraidos["precio"] = precio
+        except Exception as e:
+            atributos_extraidos["precio"] = "No encontrado: " + str(e)
 
+        try:
             asin = elemento.get_attribute("data-asin")
             atributos_extraidos["asin"] = asin
         except Exception as e:
-            atributos_extraidos[e] = "Error: " + str(e)
-        #NOTA: sacar todo lo posible , profundidad si o no (binario) seleccionar al extraer
-        if not (atributosP):
-            url_elemento = elemento.find_element(By.XPATH, './/a[@class="a.a-link-normal"]')  # Entramos en el producto
+            atributos_extraidos["asin"] = "No encontrado: " + str(e)
+
+        if not atributosP:
+            url_elemento = elemento.find_element(By.XPATH, './/a[@class="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"]')
             url = url_elemento.get_attribute('href')
             self.driver.get(url)
             try:
-                    titulo = elemento.find_element(By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]').text
-                    atributos_extraidos["titulo"] = titulo
-                    #descripcion = 
-                    atributos_extraidos["descripcion"] = descripcion
-                    #vendedor = 
-                    atributos_extraidos["vendedor"] = vendedor
+                atributos_extraidos["review"] = self.driver.find_element(by=By.XPATH, value='.//span[@id="acrCustomerReviewText"]').text
             except Exception as e:
-                atributos_extraidos[e] = "Error: " + str(e)  
+                atributos_extraidos["review"] = "No encontrado: " + str(e)
+
+            try:
+                atributos_extraidos["vendedor"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-small tabular-buybox-text-message"]').text
+            except Exception as e:
+                atributos_extraidos["vendedor"] = "No encontrado: " + str(e)
+
+            try:
+                atributos_extraidos["estrellas"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-base a-color-base"]').text
+            except Exception as e:
+                atributos_extraidos["estrellas"] = "No encontrado: " + str(e)
+
+            self.driver.back()
+            accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
+            accept_button.click()
+
         return atributos_extraidos
+
         
     
     def buscar_productos(self, categoria, num_productos,atributos_en_profundidad,atributos_a_extraer, log_callback=None):
@@ -50,22 +67,23 @@ class AmazonWeb(Web):
         productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
         # Aceptar las cookies
+        sleep(3)
         accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
         accept_button.click()
         while Numero_Productos != num_productos:
             wait = WebDriverWait(self.driver, 10)
-            elementos = wait.until(EC.presence_of_all_elements_located((By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]')))
-
+            elementos = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
             for elemento in elementos:
                 atributos_extraidos = self.extraer_atributos_producto(elemento,atributos_en_profundidad)
                 print(atributos_extraidos)
                 producto = AmazonProducto(**atributos_extraidos)
                 productos.agregar_producto(producto)
+                Numero_Productos += 1
                 if log_callback is not None:
                     log_callback(f"Producto Numero: {Numero_Productos}")
                     log_callback(f"Producto agregado: {producto.titulo} - {producto.precio} - {producto.asin}")
                     log_callback(f"Restantes: {num_productos-Numero_Productos}")
-                Numero_Productos += 1
+                
                 if Numero_Productos == num_productos:
                     return productos
 
