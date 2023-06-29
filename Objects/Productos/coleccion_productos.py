@@ -9,13 +9,15 @@ class ColeccionProductos:
          nuevo_df = pd.DataFrame([producto.__dict__])
          self.df = pd.concat([self.df, nuevo_df], ignore_index=True)
 
-
+    #Exportar al final de extraer los datos, recorrer en 2 niveles todos los produtos. Usar un dict en amazon web
     def eliminar_duplicados(self):
         self.df = self.df.drop_duplicates()
 
     def exportar(self, formato, path):
         #df_seleccionado = self.df[self.df.columns.intersection(self.seleccion)]
-        df_seleccionado = self.df
+        #pd.DataFrame.from_dict
+        
+        df_seleccionado = self.df[self.seleccion]
         if formato == "json":
             json_data = df_seleccionado.to_json(orient="records", indent=4)
             with open(path, "w") as f:

@@ -6,7 +6,7 @@ from datetime import datetime
 web="Amazon"
 categoria = "moda"
 num_productos = 4
-atributos_en_profundidad = False
+atributos_en_profundidad = True
 show_browser = True
 running = True
 log_callback = None

@@ -33,7 +33,7 @@ class AmazonWeb(Web):
         except Exception as e:
             atributos_extraidos["asin"] = "No encontrado: " + str(e)
 
-        if not atributosP:
+        if atributosP:
             url_elemento = elemento.find_element(By.XPATH, './/a[@class="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"]')
             url = url_elemento.get_attribute('href')
             self.driver.get(url)
@@ -63,7 +63,7 @@ class AmazonWeb(Web):
     def buscar_productos(self, categoria, num_productos,atributos_en_profundidad,atributos_a_extraer, log_callback=None):
         self.configurar_navegador()
         url = self.obtener_url_amazon(categoria)
-        self.driver.get(url)
+        PeticionInicial=self.driver.get(url)
         productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
         # Aceptar las cookies
@@ -72,8 +72,9 @@ class AmazonWeb(Web):
         accept_button.click()
         while Numero_Productos != num_productos:
             wait = WebDriverWait(self.driver, 10)
-            elementos = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
-            for elemento in elementos:
+            elementosList = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
+            for i in range(len(elementosList)):
+                elemento=self.driver.find_elements(By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')[i]
                 atributos_extraidos = self.extraer_atributos_producto(elemento,atributos_en_profundidad)
                 print(atributos_extraidos)
                 producto = AmazonProducto(**atributos_extraidos)
@@ -91,6 +92,7 @@ class AmazonWeb(Web):
                 sleep(3) # Espaciamos las peticiones
                 siguiente_pagina_url = self.driver.find_element_by_xpath('//a[contains(text(),"Siguiente")]').get_attribute('href')
                 self.driver.get(siguiente_pagina_url)
+                #NOTA: Contemplar limite de paginas siguiente, mostrar error al llegar al maximo si no se cumple  if Numero_Productos == num_productos:
             except:
                 break
 

@@ -65,6 +65,7 @@ class MainWindow(QMainWindow):
 
         self.num_productos_label = QLabel("Número de productos:")
         self.num_productos_edit = QLineEdit()
+        #Directamete no permitir
 
 
         self.available_products_list = QListWidget()  # Lista de atributos disponibles
