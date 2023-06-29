@@ -97,7 +97,10 @@ class AmazonWeb(Web):
                 self.driver.get(siguiente_pagina_url)
                 #NOTA: Contemplar limite de paginas siguiente, mostrar error al llegar al maximo si no se cumple  if Numero_Productos == num_productos:
             except:
-                break
+                if log_callback is not None:
+                    log_callback(f"Fin, no hay mas productos a extraer")
+                    log_callback(f"Producto totales agregados: {Numero_Productos}")
+                return productos
 
         return productos
 
