@@ -20,19 +20,19 @@ class AmazonWeb(Web):
             titulo = elemento.find_element(By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]').text
             atributos_extraidos["Titulo"] = titulo
         except Exception as e:
-            atributos_extraidos["Titulo"] = "No encontrado: " + str(e)
+            atributos_extraidos["Titulo"] = "No encontrado"
 
         try:
             precio = elemento.find_element_by_css_selector('span.a-price-whole').text
             atributos_extraidos["Precio"] = precio
         except Exception as e:
-            atributos_extraidos["Precio"] = "No encontrado: " + str(e)
+            atributos_extraidos["Precio"] = "No encontrado"
 
         try:
             asin = elemento.get_attribute("data-asin")
             atributos_extraidos["Asin"] = asin
         except Exception as e:
-            atributos_extraidos["Asin"] = "No encontrado: " + str(e)
+            atributos_extraidos["Asin"] = "No encontrado"
 
         if atributosP:
             url_elemento = elemento.find_element(By.XPATH, './/a[@class="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"]')
@@ -41,17 +41,17 @@ class AmazonWeb(Web):
             try:
                 atributos_extraidos["Review"] = self.driver.find_element(by=By.XPATH, value='.//span[@id="acrCustomerReviewText"]').text
             except Exception as e:
-                atributos_extraidos["Review"] = "No encontrado: " + str(e)
+                atributos_extraidos["Review"] = "No encontrado"
 
             try:
                 atributos_extraidos["Vendedor"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-small tabular-buybox-text-message"]').text
             except Exception as e:
-                atributos_extraidos["Vendedor"] = "No encontrado: " + str(e)
+                atributos_extraidos["Vendedor"] = "No encontrado"
 
             try:
                 atributos_extraidos["Estrellas"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-base a-color-base"]').text
             except Exception as e:
-                atributos_extraidos["Estrellas"] = "No encontrado: " + str(e)
+                atributos_extraidos["Estrellas"] = "No encontrado"
 
             self.driver.back()
     
@@ -84,7 +84,7 @@ class AmazonWeb(Web):
                 Numero_Productos += 1
                 if log_callback is not None:
                     log_callback(f"Producto Numero: {Numero_Productos}")
-                    log_callback(f"Producto agregado: {producto.titulo} - {producto.precio} - {producto.asin}")
+                    log_callback(f"Producto agregado: {producto.Titulo} - {producto.Precio} - {producto.Asin}")
                     log_callback(f"Restantes: {num_productos-Numero_Productos}")
                 
                 if Numero_Productos == num_productos:
@@ -95,7 +95,6 @@ class AmazonWeb(Web):
                 sleep(3) # Espaciamos las peticiones
                 siguiente_pagina_url = self.driver.find_element_by_xpath('//a[contains(text(),"Siguiente")]').get_attribute('href')
                 self.driver.get(siguiente_pagina_url)
-                #NOTA: Contemplar limite de paginas siguiente, mostrar error al llegar al maximo si no se cumple  if Numero_Productos == num_productos:
             except:
                 if log_callback is not None:
                     log_callback(f"Fin, no hay mas productos a extraer")

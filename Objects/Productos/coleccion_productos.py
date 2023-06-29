@@ -24,8 +24,6 @@ class ColeccionProductos:
                 f.write(json_data)
         elif formato == "csv":
             df_seleccionado.to_csv(path, index=False)
-        elif formato == "excel":
-            df_seleccionado.to_excel(path, index=False)
         elif formato == "html":
             df_seleccionado.to_html(path, index=False)
         elif formato == "pickle":

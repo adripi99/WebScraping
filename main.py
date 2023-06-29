@@ -36,7 +36,7 @@ class Worker(QThread):
             return
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
         # exportar los 
-        productos.exportar(self.export_format,"C:/Users/adrip/Desktop/VSC/Seleniumtfg2023/Objects/Export/"+datetime.now().strftime('%Y-%m-%d')+"."+self.export_format)
+        productos.exportar(self.export_format,"C:/Users/adrip/Desktop/VSC/Seleniumtfg2023/Objects/Export/"+str(datetime.now().timestamp())+"."+self.export_format)
 
         self.log_callback("Búsqueda de productos finalizada.")
 
@@ -78,7 +78,6 @@ class MainWindow(QMainWindow):
         self.export_label = QLabel("Formato de exportación:")
         self.export_combo = QComboBox()
         self.export_combo.addItem("csv")
-        self.export_combo.addItem("excel")
         self.export_combo.addItem("html")
         self.export_combo.addItem("hdf")
         self.export_combo.addItem("feather")
