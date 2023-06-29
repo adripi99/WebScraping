@@ -1,7 +1,7 @@
 class Producto:
     def __init__(self, titulo, precio):
-        self.titulo = titulo
-        self.precio = precio
+        self.Titulo = titulo
+        self.Precio = precio
 
     def __str__(self):
-        return f"{self.titulo} - {self.precio}"
+        return f"{self.Titulo} - {self.Precio}"

@@ -5,13 +5,13 @@ from Objects.Productos.coleccion_productos import ColeccionProductos
 from datetime import datetime
 web="Amazon"
 categoria = "moda"
-num_productos = 4
-atributos_en_profundidad = True
-show_browser = True
+num_productos = 1
+atributos_en_profundidad = False
+show_browser = False
 running = True
 log_callback = None
 export_format="csv"
-atributos_a_extraer=["Nombre","Precio"]
+atributos_a_extraer=["Titulo","Precio"]
 
 if web == "Amazon":
     web = AmazonWeb(show_browser)

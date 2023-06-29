@@ -3,10 +3,12 @@
   {
   "categorias": ["electrónica","moda","cocina","ordenadores"],
   "atributos":{
-    "Nombre":0,
+    "Titulo":0,
     "Precio":0,
-    "Reviews":1,
-    "Asin":0
+    "Review":1,
+    "Asin":0,
+    "Vendedor":1,
+    "Estrellas":1
         }
       },
   "Aliexpress":

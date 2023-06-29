@@ -9,50 +9,52 @@ from selenium.webdriver.chrome.options import Options
 
 class AmazonWeb(Web):
     def __init__(self, show_browser):
-        super().__init__(show_browser)
+        super().__init__()
+        self.show_browser=show_browser
 
     def configurar_navegador(self):
-        super().configurar_navegador()
+        super().configurar_navegador(self.show_browser)
     def extraer_atributos_producto(self, elemento, atributosP):
         atributos_extraidos = {}
         try:
             titulo = elemento.find_element(By.XPATH, './/span[@class="a-size-base-plus a-color-base a-text-normal"]').text
-            atributos_extraidos["titulo"] = titulo
+            atributos_extraidos["Titulo"] = titulo
         except Exception as e:
-            atributos_extraidos["titulo"] = "No encontrado: " + str(e)
+            atributos_extraidos["Titulo"] = "No encontrado: " + str(e)
 
         try:
             precio = elemento.find_element_by_css_selector('span.a-price-whole').text
-            atributos_extraidos["precio"] = precio
+            atributos_extraidos["Precio"] = precio
         except Exception as e:
-            atributos_extraidos["precio"] = "No encontrado: " + str(e)
+            atributos_extraidos["Precio"] = "No encontrado: " + str(e)
 
         try:
             asin = elemento.get_attribute("data-asin")
-            atributos_extraidos["asin"] = asin
+            atributos_extraidos["Asin"] = asin
         except Exception as e:
-            atributos_extraidos["asin"] = "No encontrado: " + str(e)
+            atributos_extraidos["Asin"] = "No encontrado: " + str(e)
 
         if atributosP:
             url_elemento = elemento.find_element(By.XPATH, './/a[@class="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"]')
             url = url_elemento.get_attribute('href')
             self.driver.get(url)
             try:
-                atributos_extraidos["review"] = self.driver.find_element(by=By.XPATH, value='.//span[@id="acrCustomerReviewText"]').text
+                atributos_extraidos["Review"] = self.driver.find_element(by=By.XPATH, value='.//span[@id="acrCustomerReviewText"]').text
             except Exception as e:
-                atributos_extraidos["review"] = "No encontrado: " + str(e)
+                atributos_extraidos["Review"] = "No encontrado: " + str(e)
 
             try:
-                atributos_extraidos["vendedor"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-small tabular-buybox-text-message"]').text
+                atributos_extraidos["Vendedor"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-small tabular-buybox-text-message"]').text
             except Exception as e:
-                atributos_extraidos["vendedor"] = "No encontrado: " + str(e)
+                atributos_extraidos["Vendedor"] = "No encontrado: " + str(e)
 
             try:
-                atributos_extraidos["estrellas"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-base a-color-base"]').text
+                atributos_extraidos["Estrellas"] = self.driver.find_element(By.XPATH, './/span[@class="a-size-base a-color-base"]').text
             except Exception as e:
-                atributos_extraidos["estrellas"] = "No encontrado: " + str(e)
+                atributos_extraidos["Estrellas"] = "No encontrado: " + str(e)
 
             self.driver.back()
+    
             accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
             accept_button.click()
 
@@ -63,7 +65,7 @@ class AmazonWeb(Web):
     def buscar_productos(self, categoria, num_productos,atributos_en_profundidad,atributos_a_extraer, log_callback=None):
         self.configurar_navegador()
         url = self.obtener_url_amazon(categoria)
-        PeticionInicial=self.driver.get(url)
+        self.driver.get(url)
         productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
         # Aceptar las cookies
@@ -86,6 +88,7 @@ class AmazonWeb(Web):
                     log_callback(f"Restantes: {num_productos-Numero_Productos}")
                 
                 if Numero_Productos == num_productos:
+                    self.driver.close()
                     return productos
 
             try:
