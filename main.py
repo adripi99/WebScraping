@@ -1,7 +1,8 @@
 import sys
 import json
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget
-from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtCore import Qt, QThread, pyqtSignal,QRegularExpression
+from PyQt6.QtGui import QRegularExpressionValidator
 from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
@@ -65,7 +66,9 @@ class MainWindow(QMainWindow):
 
         self.num_productos_label = QLabel("Número de productos:")
         self.num_productos_edit = QLineEdit()
-        #Directamete no permitir
+        # validar para aceptar solo números enteros
+        validator = QRegularExpressionValidator(QRegularExpression("[0-9]+"))
+        self.num_productos_edit.setValidator(validator)
 
 
         self.available_products_list = QListWidget()  # Lista de atributos disponibles
