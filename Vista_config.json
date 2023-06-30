@@ -15,9 +15,9 @@
   {
   "categorias": ["cocina","ordenadores"],
   "atributos":{
-    "Nombre":0,
-    "Precio":0,
-    "Reviews":1 
+    "Titulo":0,
+    "Vendedor":1,
+    "Estrellas":1
   }
   }
   }

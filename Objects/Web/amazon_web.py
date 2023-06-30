@@ -14,6 +14,7 @@ class AmazonWeb(Web):
 
     def configurar_navegador(self):
         super().configurar_navegador(self.show_browser)
+
     def extraer_atributos_producto(self, elemento, atributosP):
         atributos_extraidos = {}
         try:
@@ -78,7 +79,7 @@ class AmazonWeb(Web):
             for i in range(len(elementosList)):
                 elemento=self.driver.find_elements(By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')[i]
                 atributos_extraidos = self.extraer_atributos_producto(elemento,atributos_en_profundidad)
-                print(atributos_extraidos)
+                #print(atributos_extraidos)
                 producto = AmazonProducto(**atributos_extraidos)
                 productos.agregar_producto(producto)
                 Numero_Productos += 1
@@ -110,8 +111,8 @@ class AmazonWeb(Web):
         categorias_urls = {
             "electrónica": "https://www.amazon.es/s?i=electronics&page=2",
             "moda": "https://www.amazon.es/s?i=fashion&page=2",
-            "Cocina": "https://www.amazon.es/s?i=kitchen&page=2",
-            "Ordenadores" :"https://www.amazon.es/s?i=computers&page=2"
+            "cocina": "https://www.amazon.es/s?i=kitchen&page=2",
+            "ordenadores" :"https://www.amazon.es/s?i=computers&page=2"
             # -----------------Agrega más categorías-------------------------
         }
         return categorias_urls.get(categoria.lower())

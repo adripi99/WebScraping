@@ -3,11 +3,11 @@ from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
 from datetime import datetime
-web="Amazon"
-categoria = "moda"
-num_productos = 70
-atributos_en_profundidad = False
-show_browser = False
+web="Aliexpress"
+categoria = "cocina"
+num_productos = 2
+atributos_en_profundidad = True
+show_browser = True
 running = True
 log_callback = None
 export_format="csv"
