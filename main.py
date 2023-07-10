@@ -12,6 +12,19 @@ from datetime import datetime
 #NOTA: DEF funciones codigo. triplecomillas descripcion y argumentos.extension vsc
 jsondata={}
 class Worker(QThread):
+    """
+    Clase Worker que realiza el trabajo de web scraping en un hilo aparte.
+
+    Args:
+        web (str): Nombre de la página web a escrapear.
+        categoria (str): Categoría de productos a buscar.
+        num_productos (int): Número de productos a buscar.
+        atributos_a_extraer (list): Lista de atributos a extraer de los productos.
+        atributos_en_profundidad (bool): Indica si se deben extraer atributos en profundidad.
+        show_browser (bool): Indica si se debe mostrar el navegador durante el scraping.
+        export_format (str): Formato de exportación de los resultados.
+        log_callback (func): Función de devolución de llamada para el registro de eventos.
+    """
     finished = pyqtSignal()
     def __init__(self, web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, log_callback):
         super().__init__()
@@ -25,6 +38,10 @@ class Worker(QThread):
         self.export_format=export_format
         self.atributos_a_extraer=atributos_a_extraer
     def run(self):
+        """
+        Método que ejecuta el trabajo de web scraping.
+
+        """
         web = None
 
         if self.web == "Amazon":
@@ -42,10 +59,17 @@ class Worker(QThread):
         self.log_callback("Búsqueda de productos finalizada.")
 
     def stop(self):
+        """
+        Método que detiene la ejecución del trabajo.
+
+        """
         self.running = False
 
 class MainWindow(QMainWindow):
+    """
+    Clase MainWindow que representa la interfaz de usuario principal.
 
+    """
     def __init__(self):
         super().__init__()
 
@@ -123,18 +147,30 @@ class MainWindow(QMainWindow):
         self.move_to_available_button.clicked.connect(self.move_to_available)
 
     def move_to_selected(self):
+        """
+        Mueve un atributo seleccionado de la lista de atributos disponibles a la lista de atributos seleccionados.
+
+        """
         selected_item = self.available_products_list.currentItem()
         if selected_item is not None:
             self.available_products_list.takeItem(self.available_products_list.row(selected_item))
             self.selected_products_list.addItem(selected_item.text())
 
     def move_to_available(self):
+        """
+        Mueve un atributo seleccionado de la lista de atributos seleccionados a la lista de atributos disponibles.
+
+        """
         selected_item = self.selected_products_list.currentItem()
         if selected_item is not None:
             self.selected_products_list.takeItem(self.selected_products_list.row(selected_item))
             self.available_products_list.addItem(selected_item.text())
     
     def start_scraping(self):
+        """
+        Inicia el proceso de web scraping con los parámetros especificados.
+
+        """
         if self.worker is not None and self.worker.isRunning():
             self.worker.stop()
 
@@ -152,6 +188,10 @@ class MainWindow(QMainWindow):
         self.worker.finished.connect(self.scraping_finished)
         self.worker.start()
     def cambia_categoria(self):
+        """
+        Actualiza la lista de categorías disponibles según la página web seleccionada.
+
+        """
         web = self.web_combo.currentText()
         config = jsondata
         self.categoria_combo.clear()  # Vaciar el contenido de categoria_combo\
@@ -165,12 +205,30 @@ class MainWindow(QMainWindow):
         for atributo in Atributos:
             self.available_products_list.addItem(atributo.capitalize())
     def scraping_finished(self):
+        """
+        Se ejecuta cuando el proceso de web scraping ha finalizado.
+
+        """
         self.worker = None
 
     def log_callback(self, message):
+        """
+        Agrega un mensaje al registro de eventos en la interfaz de usuario.
+
+        Args:
+            message (str): Mensaje a agregar al registro.
+
+        """
         self.log_text.append(message)
         
 def load_config(file_path):
+    """
+    Lee la configuracion desde un .json
+
+    Args:
+         file_path (str): Ruta del fichero de configuracion.
+
+        """
     with open(file_path, "r", encoding="utf-8") as f:
         config = json.load(f)
     return config
