@@ -176,14 +176,25 @@ class MainWindow(QMainWindow):
 
         web = self.web_combo.currentText()
         categoria = self.categoria_combo.currentText()
-        num_productos = int(self.num_productos_edit.text())
+        num_productos_text = self.num_productos_edit.text()
         export_format = self.export_combo.currentText().lower()
         show_browser = self.show_browser_checkbox.isChecked()
         atributos_a_extraer = [self.selected_products_list.item(i).text() for i in range(self.selected_products_list.count())]
         atributos_en_profundidad= False
         if 1 in jsondata[web].get("atributos", {}).values():
             atributos_en_profundidad = True
-            
+        if not atributos_a_extraer:
+            self.log_callback("Debe seleccionar al menos un atributo para extraer.")
+            return
+        try:
+            num_productos = int(num_productos_text)
+            if num_productos <= 0:
+                self.log_callback("El número de productos debe ser mayor a cero.")
+                return
+        except ValueError:
+            self.log_callback("Ingrese un número válido para el número de productos.")
+            return
+
         self.worker = Worker(web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, self.log_callback)
         self.worker.finished.connect(self.scraping_finished)
         self.worker.start()
