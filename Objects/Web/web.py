@@ -27,3 +27,54 @@ class Web:
         self.chrome_options.add_argument('--ignore-certificate-errors')
         self.chrome_options.add_argument('--ignore-ssl-errors')
         self.driver = webdriver.Chrome(self.driver_path, options=self.chrome_options)
+        
+    def cerrar_navegador(self):
+        """
+        Cierra el navegador web.
+
+        """
+        self.driver.quit()
+
+    def obtener_url(self, categoria):
+        """
+        Obtiene la URL específica de la web para la categoría especificada.
+
+        Args:
+            categoria (str): Categoría para la cual se desea obtener la URL.
+
+        Returns:
+            str: URL específica de la web para la categoría especificada.
+
+        """
+        raise NotImplementedError("El método 'obtener_url()' debe ser implementado por cada clase hija.")
+
+    def extraer_atributos_producto(self, elemento, atributosP):
+        """
+        Extrae los atributos específicos del producto en la web correspondiente.
+
+        Args:
+            elemento: Elemento HTML del producto.
+            atributosP (bool): Indica si se deben extraer atributos en profundidad.
+
+        Returns:
+            dict: Diccionario de atributos extraídos del producto.
+
+        """
+        raise NotImplementedError("El método 'extraer_atributos_producto()' debe ser implementado por cada clase hija.")
+
+    def buscar_productos(self, categoria, num_productos, atributos_en_profundidad, atributos_a_extraer, log_callback=None):
+        """
+        Realiza la búsqueda y extracción de productos en la web correspondiente.
+
+        Args:
+            categoria (str): Categoría de productos a buscar.
+            num_productos (int): Número de productos a extraer.
+            atributos_en_profundidad (bool): Indica si se deben extraer atributos en profundidad.
+            atributos_a_extraer (list): Lista de atributos a extraer de los productos.
+            log_callback (func): Función de devolución de llamada para registrar mensajes de progreso (opcional).
+
+        Returns:
+            ColeccionProductos: Colección de productos extraídos.
+
+        """
+        raise NotImplementedError("El método 'buscar_productos()' debe ser implementado por cada clase hija.")
