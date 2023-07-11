@@ -53,8 +53,8 @@ class Worker(QThread):
             self.finished.emit()
             return
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
-        # exportar los 
-        productos.exportar(self.export_format,"C:/Users/adrip/Desktop/VSC/Seleniumtfg2023/Objects/Export/"+str(datetime.now().timestamp())+"."+self.export_format)
+        # exportar los Objects\Export
+        productos.exportar(self.export_format,"/Objects/Export/"+self.web+"/"+self.categoria+"/"+str(datetime.now().timestamp())+"."+self.export_format)
 
         self.log_callback("Búsqueda de productos finalizada.")
 
