@@ -20,7 +20,7 @@ class AmazonWeb(Web):
             atributos_extraidos["Titulo"] = "No encontrado"
 
         try:
-            precio = elemento.find_element_by_css_selector('span.a-price-whole').text
+            precio = elemento.find_element(By.CSS_SELECTOR,'span.a-price-whole').text
             atributos_extraidos["Precio"] = precio
         except Exception as e:
             atributos_extraidos["Precio"] = "No encontrado"
