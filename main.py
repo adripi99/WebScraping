@@ -55,8 +55,8 @@ class Worker(QThread):
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
         # exportar los Objects\Export
         productos.exportar(self.export_format,"Objects/Export/"+self.web+"/"+self.categoria+"/"+str(datetime.now().timestamp())+"."+self.export_format)
-
-        self.log_callback("Búsqueda de productos finalizada.")
+        self.scraping_finished()
+        self.stop
 
     def stop(self):
         """
@@ -231,6 +231,7 @@ class MainWindow(QMainWindow):
         Se ejecuta cuando el proceso de web scraping ha finalizado.
 
         """
+        self.log_callback("Búsqueda de productos finalizada.")
         self.start_button.setEnabled(True)  # Habilitar el botón de inicio
         self.worker = None
 
