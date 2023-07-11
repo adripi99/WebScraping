@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
         show_browser = self.show_browser_checkbox.isChecked()
         atributos_a_extraer = [self.selected_products_list.item(i).text() for i in range(self.selected_products_list.count())]
         atributos_en_profundidad= False
-        if 1 in jsondata[web].get("atributos", {}).values():
+        if any(atributo in atributos_a_extraer for atributo, valor in jsondata[web].get("atributos", {}).items() if valor == 1):
             atributos_en_profundidad = True
         if not atributos_a_extraer:
             self.log_callback("Debe seleccionar al menos un atributo para extraer.")
