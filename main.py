@@ -104,12 +104,9 @@ class MainWindow(QMainWindow):
        
         self.export_label = QLabel("Formato de exportación:")
         self.export_combo = QComboBox()
-        self.export_combo.addItem("csv")
-        self.export_combo.addItem("html")
-        self.export_combo.addItem("hdf")
-        self.export_combo.addItem("feather")
-        self.export_combo.addItem("parquet")
-        self.export_combo.addItem("pickle")
+        formats = ["csv", "excel", "html", "hdf", "feather", "parquet", "pickle"]
+        for format in formats:
+            self.export_combo.addItem(format)
 
         self.show_browser_checkbox = QCheckBox("Mostrar Navegador")
 

@@ -9,11 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 class AmazonWeb(Web):
     def __init__(self, show_browser):
-        super().__init__()
-        self.show_browser=show_browser
-
-    def configurar_navegador(self):
-        super().configurar_navegador(self.show_browser)
+        super().__init__(show_browser)
 
     def extraer_atributos_producto(self, elemento, atributosP):
         atributos_extraidos = {}

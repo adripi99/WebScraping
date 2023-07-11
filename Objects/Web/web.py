@@ -6,13 +6,14 @@ class Web:
     Clase Web que representa una configuración de navegación web con Selenium.
 
     """
-    def __init__(self):
+    def __init__(self,show_browser):
         """
         Inicializa una instancia de la clase Web.
 
         """
         self.driver_path = "Objects\Web\chromedriver.exe"
-    def configurar_navegador(self,show_browser):
+        self.show_browser=show_browser
+    def configurar_navegador(self):
         """
         Configura el navegador web con las opciones especificadas.
 
@@ -21,7 +22,7 @@ class Web:
 
         """
         self.chrome_options = Options()
-        if not show_browser:
+        if not self.show_browser:
             self.chrome_options.add_argument('--headless=new')  # Ocultar el navegador
         self.chrome_options.add_argument('--log-level=3')
         self.chrome_options.add_argument('--ignore-certificate-errors')
