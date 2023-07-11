@@ -80,8 +80,7 @@ class MainWindow(QMainWindow):
 
         self.web_label = QLabel("Pagina Web:")
         self.web_combo = QComboBox()
-        self.web_combo.addItem("Amazon")
-        self.web_combo.addItem("Aliexpress")
+       
 
         self.categoria_label = QLabel("Categoría:")
         self.categoria_combo = QComboBox()
@@ -138,6 +137,7 @@ class MainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         #Eventos
+    
         self.web_combo.currentTextChanged.connect(self.cambia_categoria)
         self.start_button.clicked.connect(self.start_scraping)
         self.move_to_selected_button.clicked.connect(self.move_to_selected)
@@ -200,8 +200,13 @@ class MainWindow(QMainWindow):
         Actualiza la lista de categorías disponibles según la página web seleccionada.
 
         """
-        web = self.web_combo.currentText()
         config = jsondata
+        if self.web_combo.currentText() == '':
+            webs = list(config.keys())
+            for webi in webs:
+                self.web_combo.addItem(webi.capitalize())
+        web = self.web_combo.currentText()
+
         self.categoria_combo.clear()  # Vaciar el contenido de categoria_combo\
         self.available_products_list.clear()
         self.selected_products_list.clear()
