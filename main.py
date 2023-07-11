@@ -1,6 +1,6 @@
 import sys
 import json
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel,QGridLayout, QVBoxLayout,QHBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget
 from PyQt6.QtCore import Qt, QThread, pyqtSignal,QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
 from Objects.Web.aliexpress_web import AliexpressWeb
@@ -112,29 +112,38 @@ class MainWindow(QMainWindow):
         self.start_button = QPushButton("Iniciar")
 
         self.log_text = QTextEdit()
-        layout = QVBoxLayout()
-        layout.addWidget(self.web_label)
-        layout.addWidget(self.web_combo)
-        layout.addWidget(self.categoria_label)
-        layout.addWidget(self.categoria_combo)
-        layout.addWidget(self.num_productos_label)
-        layout.addWidget(self.num_productos_edit)
-        layout.addWidget(QLabel("Atributos Disponibles a extraer:")) # NOTA: Horizontal layout con adwidget con un sublayout 
-        layout.addWidget(self.available_products_list)
-        layout.addWidget(self.move_to_selected_button)
-        layout.addWidget(self.move_to_available_button)
-        layout.addWidget(QLabel("Atributos Seleccionados:"))
-        layout.addWidget(self.selected_products_list)
-        layout.addWidget(self.export_label)
-        layout.addWidget(self.export_combo)
-        layout.addWidget(self.show_browser_checkbox)
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.log_text)
-        
+        left_layout = QVBoxLayout()  # Layout para la columna izquierda
+        right_layout = QHBoxLayout()  # Layout para la columna derecha
 
+        left_layout.addWidget(self.web_label)
+        left_layout.addWidget(self.web_combo)
+        left_layout.addWidget(self.categoria_label)
+        left_layout.addWidget(self.categoria_combo)
+        left_layout.addWidget(self.num_productos_label)
+        left_layout.addWidget(self.num_productos_edit)
+
+        attribute_layout = QGridLayout()  # Layout en cuadrícula para la sección de atributos
+        attribute_layout.addWidget(QLabel("Atributos Disponibles a extraer:"), 0, 0)  # Encima de la lista de atributos disponibles
+        attribute_layout.addWidget(QLabel("Atributos Seleccionados:"), 0, 1)  # Encima de la lista de atributos seleccionados
+        attribute_layout.addWidget(self.available_products_list, 1, 0)  # Lista de atributos disponibles
+        attribute_layout.addWidget(self.selected_products_list, 1, 1)  # Lista de atributos seleccionados
+        attribute_layout.addWidget(self.move_to_selected_button, 2, 0)  # Botón ">"
+        attribute_layout.addWidget(self.move_to_available_button, 2, 1)  # Botón "<"
+        left_layout.addLayout(attribute_layout)
+
+
+        left_layout.addWidget(self.export_label)
+        left_layout.addWidget(self.export_combo)
+        left_layout.addWidget(self.show_browser_checkbox)
+        left_layout.addWidget(self.start_button)
+        left_layout.addWidget(self.log_text)
+
+        main_layout = QVBoxLayout()  # Layout principal
+        main_layout.addLayout(left_layout)
+        main_layout.addLayout(right_layout)
 
         widget = QWidget()
-        widget.setLayout(layout)
+        widget.setLayout(main_layout)
         self.setCentralWidget(widget)
         #Eventos
     
@@ -170,7 +179,7 @@ class MainWindow(QMainWindow):
         """
         if self.worker is not None and self.worker.isRunning():
             self.worker.stop()
-
+        self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
         web = self.web_combo.currentText()
         categoria = self.categoria_combo.currentText()
         num_productos_text = self.num_productos_edit.text()
@@ -222,6 +231,7 @@ class MainWindow(QMainWindow):
         Se ejecuta cuando el proceso de web scraping ha finalizado.
 
         """
+        self.start_button.setEnabled(True)  # Habilitar el botón de inicio
         self.worker = None
 
     def log_callback(self, message):
