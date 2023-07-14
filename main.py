@@ -6,7 +6,7 @@ from PyQt6.QtGui import QRegularExpressionValidator
 from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
-import debugpy
+import os
 from datetime import datetime
 # Variables globales
 #NOTA: DEF funciones codigo. triplecomillas descripcion y argumentos.extension vsc
@@ -54,7 +54,9 @@ class Worker(QThread):
             return
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
         # exportar los Objects\Export
-        productos.exportar(self.export_format,"Objects/Export/"+self.web+"/"+self.categoria+"/"+str(datetime.now().timestamp())+"."+self.export_format)
+        directorio="Objects/Export/"+self.web+"/"+self.categoria+"/"
+        os.makedirs(directorio, exist_ok=True)
+        productos.exportar(self.export_format,directorio+str(datetime.now().timestamp())+"."+self.export_format)
         self.finished.emit()
         self.stop
 
