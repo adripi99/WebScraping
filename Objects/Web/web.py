@@ -34,6 +34,7 @@ class Web:
         Cierra el navegador web.
 
         """
+        self.driver.close()
         self.driver.quit()
 
     def obtener_url(self, categoria):

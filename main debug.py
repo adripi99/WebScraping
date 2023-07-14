@@ -4,11 +4,12 @@ from Objects.Web.amazon_web import AmazonWeb
 from Objects.Web.tripadvisor_web import TripadvisorWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
 from datetime import datetime
-web="Tripadvisor"
-categoria = "Gijon"
-num_productos = 2
-atributos_en_profundidad = True
-show_browser = True
+import os
+web="Amazon"
+categoria = "Moda"
+num_productos = 800
+atributos_en_profundidad = False
+show_browser = False
 running = True
 log_callback = None
 export_format="csv"
@@ -22,7 +23,6 @@ elif web == "Tripadvisor":
     web = TripadvisorWeb(show_browser)
 
 productos = web.buscar_productos(categoria,num_productos,atributos_en_profundidad,atributos_a_extraer,log_callback)
-# exportar los 
-productos.exportar(export_format,"C:/Users/adrip/Desktop/VSC/Seleniumtfg2023/Objects/Export/"+datetime.now().strftime('%Y-%m-%d')+"."+export_format)
+
 
 

@@ -74,7 +74,7 @@ class AliexpressWeb(Web):
                     log_callback(f"Restantes: {num_productos-Numero_Productos}")
                 
                 if Numero_Productos == num_productos:
-                    self.driver.close()
+                    self.driver.quit()
                     return productos
 
             try:

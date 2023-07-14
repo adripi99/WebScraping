@@ -85,7 +85,7 @@ class AmazonWeb(Web):
                     log_callback(f"Restantes: {num_productos-Numero_Productos}")
                 
                 if Numero_Productos == num_productos:
-                    self.driver.close()
+                    self.cerrar_navegador()
                     return productos
 
             try:

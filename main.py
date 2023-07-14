@@ -58,7 +58,6 @@ class Worker(QThread):
         os.makedirs(directorio, exist_ok=True)
         productos.exportar(self.export_format,directorio+str(datetime.now().timestamp())+"."+self.export_format)
         self.finished.emit()
-        self.stop
 
     def stop(self):
         """
@@ -202,6 +201,7 @@ class MainWindow(QMainWindow):
             self.log_callback("Ingrese un número válido para el número de productos.")
             return
         self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
+        self.log_callback("Comenzando el Scraping, espere.")
         self.worker = Worker(web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, self.log_callback)
         self.worker.finished.connect(self.scraping_finished)
         self.worker.start()
@@ -235,7 +235,7 @@ class MainWindow(QMainWindow):
         """
         self.log_callback("Búsqueda de productos finalizada.")
         self.start_button.setEnabled(True)  # Habilitar el botón de inicio
-        #self.worker = None
+        self.worker = None
 
     def log_callback(self, message):
         """
