@@ -55,7 +55,6 @@ class Worker(QThread):
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
         # exportar los Objects\Export
         productos.exportar(self.export_format,"Objects/Export/"+self.web+"/"+self.categoria+"/"+str(datetime.now().timestamp())+"."+self.export_format)
-        self.scraping_finished()
         self.stop
 
     def stop(self):
@@ -179,7 +178,6 @@ class MainWindow(QMainWindow):
         """
         if self.worker is not None and self.worker.isRunning():
             self.worker.stop()
-        self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
         web = self.web_combo.currentText()
         categoria = self.categoria_combo.currentText()
         num_productos_text = self.num_productos_edit.text()
@@ -200,7 +198,7 @@ class MainWindow(QMainWindow):
         except ValueError:
             self.log_callback("Ingrese un número válido para el número de productos.")
             return
-
+        self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
         self.worker = Worker(web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, self.log_callback)
         self.worker.finished.connect(self.scraping_finished)
         self.worker.start()
