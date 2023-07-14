@@ -78,6 +78,8 @@ class AliexpressWeb(Web):
                     return productos
 
             try:
+                if log_callback is not None:
+                    log_callback(f"---Pasando de página---")
                 sleep(3)  # Espaciamos las peticiones
                 siguiente_pagina_url = self.driver.find_element(By.XPATH, '//a[contains(text(),"Siguiente")]').get_attribute('href')
                 self.driver.get(siguiente_pagina_url)

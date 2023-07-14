@@ -55,6 +55,7 @@ class Worker(QThread):
         productos = web.buscar_productos(self.categoria, self.num_productos,self.atributos_en_profundidad,self.atributos_a_extraer, self.log_callback)
         # exportar los Objects\Export
         productos.exportar(self.export_format,"Objects/Export/"+self.web+"/"+self.categoria+"/"+str(datetime.now().timestamp())+"."+self.export_format)
+        self.finished.emit()
         self.stop
 
     def stop(self):
@@ -102,7 +103,7 @@ class MainWindow(QMainWindow):
        
         self.export_label = QLabel("Formato de exportación:")
         self.export_combo = QComboBox()
-        formats = ["csv", "excel", "html", "hdf", "feather", "parquet", "pickle"]
+        formats = ["csv", "html", "feather", "parquet", "pickle"]
         for format in formats:
             self.export_combo.addItem(format)
 
@@ -202,6 +203,7 @@ class MainWindow(QMainWindow):
         self.worker = Worker(web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, self.log_callback)
         self.worker.finished.connect(self.scraping_finished)
         self.worker.start()
+       
     def cambia_categoria(self):
         """
         Actualiza la lista de categorías disponibles según la página web seleccionada.
@@ -231,7 +233,7 @@ class MainWindow(QMainWindow):
         """
         self.log_callback("Búsqueda de productos finalizada.")
         self.start_button.setEnabled(True)  # Habilitar el botón de inicio
-        self.worker = None
+        #self.worker = None
 
     def log_callback(self, message):
         """
