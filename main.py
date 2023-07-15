@@ -1,6 +1,6 @@
 import sys
 import json
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel,QGridLayout, QVBoxLayout,QHBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel,QGridLayout, QVBoxLayout,QHBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget,QMessageBox
 from PyQt6.QtCore import QThread, QObject, pyqtSignal,QRegularExpression,Qt
 from PyQt6.QtGui import QRegularExpressionValidator
 from Objects.Web.aliexpress_web import AliexpressWeb
@@ -172,7 +172,13 @@ class MainWindow(QMainWindow):
         if selected_item is not None:
             self.selected_products_list.takeItem(self.selected_products_list.row(selected_item))
             self.available_products_list.addItem(selected_item.text())
-    
+    def Merror(self,error_text):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Icon.Critical)
+        msg.setText("Error")
+        msg.setInformativeText(error_text)
+        msg.setWindowTitle("Error")
+        msg.exec()
     def start_scraping(self):
         """
         Inicia el proceso de web scraping con los parámetros especificados.
@@ -194,17 +200,17 @@ class MainWindow(QMainWindow):
         if any(atributo in atributos_a_extraer for atributo, valor in jsondata[web].get("atributos", {}).items() if valor == 1):
             atributos_en_profundidad = True
 
-        if not atributos_a_extraer:
-            self.log_callback("Debe seleccionar al menos un atributo para extraer.")
-            return
-
         try:
             num_productos = int(num_productos_text)
             if num_productos <= 0:
-                self.log_callback("El número de productos debe ser mayor a cero.")
+                self.Merror("El número de productos debe ser mayor a cero.")
                 return
         except ValueError:
-            self.log_callback("Ingrese un número válido para el número de productos.")
+            self.Merror("Ingrese un número válido para el número de productos.")
+            return
+        
+        if not atributos_a_extraer:
+            self.Merror("Debe seleccionar al menos un atributo para extraer.")
             return
         
         self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
