@@ -1,7 +1,7 @@
 import sys
 import json
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel,QGridLayout, QVBoxLayout,QHBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget
-from PyQt6.QtCore import Qt, QThread, pyqtSignal,QRegularExpression
+from PyQt6.QtCore import QThread, QObject, pyqtSignal,QRegularExpression,Qt
 from PyQt6.QtGui import QRegularExpressionValidator
 from Objects.Web.aliexpress_web import AliexpressWeb
 from Objects.Web.amazon_web import AmazonWeb
@@ -179,7 +179,10 @@ class MainWindow(QMainWindow):
 
         """
         if self.worker is not None and self.worker.isRunning():
-            self.worker.stop()
+            self.worker.quit()
+            self.worker.wait()
+            self.worker.deleteLater()
+
         web = self.web_combo.currentText()
         categoria = self.categoria_combo.currentText()
         num_productos_text = self.num_productos_edit.text()
@@ -187,11 +190,14 @@ class MainWindow(QMainWindow):
         show_browser = self.show_browser_checkbox.isChecked()
         atributos_a_extraer = [self.selected_products_list.item(i).text() for i in range(self.selected_products_list.count())]
         atributos_en_profundidad= False
+
         if any(atributo in atributos_a_extraer for atributo, valor in jsondata[web].get("atributos", {}).items() if valor == 1):
             atributos_en_profundidad = True
+
         if not atributos_a_extraer:
             self.log_callback("Debe seleccionar al menos un atributo para extraer.")
             return
+
         try:
             num_productos = int(num_productos_text)
             if num_productos <= 0:
@@ -200,10 +206,14 @@ class MainWindow(QMainWindow):
         except ValueError:
             self.log_callback("Ingrese un número válido para el número de productos.")
             return
+        
         self.start_button.setEnabled(False)  # Deshabilitar el botón de inicio
         self.log_callback("Comenzando el Scraping, espere.")
+
         self.worker = Worker(web, categoria, num_productos, atributos_a_extraer, atributos_en_profundidad, show_browser,export_format, self.log_callback)
+
         self.worker.finished.connect(self.scraping_finished)
+
         self.worker.start()
        
     def cambia_categoria(self):
@@ -266,4 +276,7 @@ if __name__ == "__main__":
     jsondata= load_config("Vista_config.json") #encoding utf
     window.cambia_categoria()
     window.show()
-    sys.exit(app.exec())
+    try:
+        sys.exit(app.exec())
+    except Exception as e:
+        print("Se produjo un error:", str(e))

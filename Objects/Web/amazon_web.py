@@ -52,14 +52,18 @@ class AmazonWeb(Web):
 
             self.driver.back()
     
-            accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
-            accept_button.click()
+            try:
+                accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
+                accept_button.click()
+            except Exception as e:
+                print("No se encontró el botón de aceptar")
 
         return atributos_extraidos
 
         
     
     def buscar_productos(self, categoria, num_productos,atributos_en_profundidad,atributos_a_extraer, log_callback=None):
+        #log_callback=None
         self.configurar_navegador()
         url = self.obtener_url_amazon(categoria)
         self.driver.get(url)
@@ -67,8 +71,11 @@ class AmazonWeb(Web):
         Numero_Productos = 0
         # Aceptar las cookies
         sleep(3)
-        accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
-        accept_button.click()
+        try:
+            accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
+            accept_button.click()
+        except Exception as e:
+                print("No se encontró el botón de aceptar")
         while Numero_Productos != num_productos:
             wait = WebDriverWait(self.driver, 10)
             elementosList = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//div[contains(@class, "s-result-item s-asin")]')))
@@ -80,9 +87,15 @@ class AmazonWeb(Web):
                 productos.agregar_producto(producto)
                 Numero_Productos += 1
                 if log_callback is not None:
-                    log_callback(f"Producto Numero: {Numero_Productos}")
-                    log_callback(f"Producto agregado: {producto.Titulo} - {producto.Precio} - {producto.Asin}")
-                    log_callback(f"Restantes: {num_productos-Numero_Productos}")
+                    try:
+                        sleep(1)
+                        log_callback(f"Producto Numero: {Numero_Productos}")
+                        sleep(1)
+                        log_callback(f"Producto agregado: {producto.Titulo} - {producto.Precio} - {producto.Asin}")
+                        sleep(1)
+                        log_callback(f"Restantes: {num_productos-Numero_Productos}")
+                    except Exception as e:
+                        print("Error al agregar el mensaje al registro:", str(e))
                 
                 if Numero_Productos == num_productos:
                     self.cerrar_navegador()
@@ -90,14 +103,23 @@ class AmazonWeb(Web):
 
             try:
                 if log_callback is not None:
-                    log_callback(f"---Pasando de página---")
-                sleep(3) # Espaciamos las peticiones
+                    try:
+                        sleep(1)
+                        log_callback(f"---Pasando de página---")
+                    except Exception as e:
+                        print("Error al agregar el mensaje al registro:", str(e))
+                sleep(2) # Espaciamos las peticiones
                 siguiente_pagina_url = self.driver.find_element_by_xpath('//a[contains(text(),"Siguiente")]').get_attribute('href')
                 self.driver.get(siguiente_pagina_url)
             except:
                 if log_callback is not None:
-                    log_callback(f"Fin, no hay mas productos a extraer")
-                    log_callback(f"Producto totales agregados: {Numero_Productos}")
+                    try:
+                        sleep(1)
+                        log_callback(f"Fin, no hay mas productos a extraer")
+                        sleep(1)
+                        log_callback(f"Producto totales agregados: {Numero_Productos}")
+                    except Exception as e:
+                        print("Error al agregar el mensaje al registro:", str(e))
                 return productos
 
         return productos
