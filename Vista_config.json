@@ -16,6 +16,7 @@
   "categorias": ["cocina","ordenadores"],
   "atributos":{
     "Titulo":0,
+    "Precio":0,
     "Vendedor":1,
     "Estrellas":1
   }
