@@ -1,3 +1,4 @@
+#!TFG\Scripts\python.exe
 import sys
 import json
 from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel,QGridLayout, QVBoxLayout,QHBoxLayout, QWidget, QLineEdit, QPushButton, QComboBox, QTextEdit, QCheckBox, QListWidget,QMessageBox
@@ -9,7 +10,6 @@ from Objects.Productos.coleccion_productos import ColeccionProductos
 import os
 from datetime import datetime
 # Variables globales
-#NOTA: DEF funciones codigo. triplecomillas descripcion y argumentos.extension vsc
 jsondata={}
 class Worker(QThread):
     """

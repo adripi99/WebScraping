@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+from selenium.webdriver.chrome.service import Service
 class Web:
     """
     Clase Web que representa una configuración de navegación web con Selenium.
@@ -21,13 +21,14 @@ class Web:
             show_browser (bool): Indica si se debe mostrar el navegador o ejecutar en modo headless.
 
         """
+        service = Service(executable_path=self.driver_path)
         self.chrome_options = Options()
         if not self.show_browser:
             self.chrome_options.add_argument('--headless=new')  # Ocultar el navegador
         self.chrome_options.add_argument('--log-level=3')
         self.chrome_options.add_argument('--ignore-certificate-errors')
         self.chrome_options.add_argument('--ignore-ssl-errors')
-        self.driver = webdriver.Chrome(self.driver_path, options=self.chrome_options)
+        self.driver = webdriver.Chrome(service=service, options=self.chrome_options)
         
     def cerrar_navegador(self):
         """
