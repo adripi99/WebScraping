@@ -53,14 +53,14 @@ class AliexpressWeb(Web):
         accept_button.click()
         sleep(1)
         self.driver.get(url)
-        self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
-        self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+        self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
+        self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
         productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
 
         while Numero_Productos != num_productos:
-            self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
-            self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+            self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
+            self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
             wait = WebDriverWait(self.driver, 20)
             elementosList = wait.until(EC.presence_of_all_elements_located((By.XPATH,'//a[contains(@class,"earch-card-item")]')))
 
@@ -71,11 +71,11 @@ class AliexpressWeb(Web):
                 except:
                     self.driver.refresh()
                     sleep(1)
-                    self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+                    self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
                     sleep(1)
-                    self.driver.find_element_by_tag_name('body').send_keys(Keys.HOME)
+                    self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.HOME)
                     sleep(1)
-                    self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+                    self.driver.find_element(By.TAG_NAME,'body').send_keys(Keys.END)
                     sleep(1)
                     wait.until(EC.presence_of_all_elements_located((By.XPATH,'//a[contains(@class,"earch-card-item")]')))
                     try:

@@ -4,15 +4,15 @@ from Objects.Web.amazon_web import AmazonWeb
 from Objects.Productos.coleccion_productos import ColeccionProductos
 from datetime import datetime
 import os
-web="Aliexpress"
-categoria = "ordenadores"
-num_productos = 65
+web="Amazon"
+categoria = "electrónica"
+num_productos = 5
 atributos_en_profundidad = True
-show_browser = False
+show_browser = True
 running = True
 log_callback = None
 export_format="csv"
-atributos_a_extraer=["Titulo"]
+atributos_a_extraer=["Review"]
 
 if web == "Amazon":
     web = AmazonWeb(show_browser)
