@@ -101,7 +101,7 @@ class AmazonWeb(Web):
         productos = ColeccionProductos(atributos_a_extraer)
         Numero_Productos = 0
         # Aceptar las cookies
-        sleep(3)
+        sleep(2)
         try:
             accept_button = self.driver.find_element(By.ID, 'sp-cc-accept')
             accept_button.click()
