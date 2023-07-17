@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QMainWindow, QLabel, QGridLayout, QVBoxLayout, QHBox
 from PyQt6.QtCore import QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
 from worker import Worker
-import json
 class MainWindow(QMainWindow):
     """
     Clase MainWindow que representa la interfaz de usuario principal.
