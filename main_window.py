@@ -200,3 +200,4 @@ class MainWindow(QMainWindow):
 
         """
         self.log_text.append(message)
+        self.log_text.verticalScrollBar().setValue(self.log_text.verticalScrollBar().maximum()) # Asegura que el texto agregado esté visible en la parte inferior del QTextEdit
